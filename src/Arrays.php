@@ -190,6 +190,33 @@ abstract class Arrays
     }
 
     /**
+     * Maps each original value into a group, and returns an array containing the group names and values.
+     *
+     * This is similar to rename, except that the mapped names point to arrays of items that share the same group name,
+     * rather than a single item.
+     *
+     * For info on $keys, check class documentation for {@see ProjxIO\Lists\Arrays}
+     *
+     * @param array $array
+     * @param array $callbacks
+     * @param bool $keys
+     * @return array
+     */
+    public static function groups(array &$array, array $callbacks, $keys = true)
+    {
+        if (count($callbacks)) {
+            $callback = array_shift($callbacks);
+            $groups = self::group($array, $callback, $keys);
+
+            return self::map($groups, function ($group) use ($callbacks, $keys) {
+                return self::groups($group, $callbacks, $keys);
+            });
+        }
+
+        return $array;
+    }
+
+    /**
      * Standard reduce method. Use an aggregate method to obtain a single value computed from an array of items.
      *
      * Reduce invokes a callback for each item in an array. A result from a callback will be provided as a value to

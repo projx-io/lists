@@ -182,6 +182,107 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function dataGroupsProvider()
+    {
+        $function = function ($index) {
+            return function ($array) use ($index) {
+                return $array[$index];
+            };
+        };
+
+        return [
+            [
+                [$function(1), $function(2)],
+                [], []],
+            [
+                [$function(1), $function(2)],
+                [
+                    0 => [0, 'red', 'medium'],
+                    1 => [1, 'blue', 'medium'],
+                    2 => [2, 'red', 'medium'],
+                    3 => [3, 'red', 'large'],
+                    4 => [4, 'blue', 'large'],
+                    5 => [5, 'green', 'medium'],
+                    6 => [6, 'red', 'short'],
+                    7 => [7, 'red', 'medium'],
+                    8 => [8, 'blue', 'medium'],
+                ],
+                [
+                    'red' => [
+                        'medium' => [
+                            0 => [0, 'red', 'medium'],
+                            2 => [2, 'red', 'medium'],
+                            7 => [7, 'red', 'medium'],
+                        ],
+                        'large' => [
+                            3 => [3, 'red', 'large'],
+                        ],
+                        'short' => [
+                            6 => [6, 'red', 'short'],
+                        ],
+                    ],
+                    'blue' => [
+                        'medium' => [
+                            1 => [1, 'blue', 'medium'],
+                            8 => [8, 'blue', 'medium'],
+                        ],
+                        'large' => [
+                            4 => [4, 'blue', 'large'],
+                        ],
+                    ],
+                    'green' => [
+                        'medium' => [
+                            5 => [5, 'green', 'medium'],
+                        ],
+                    ],
+                ]
+            ],
+            [
+                [$function(2), $function(1)],
+                [
+                    0 => [0, 'red', 'medium'],
+                    1 => [1, 'blue', 'medium'],
+                    2 => [2, 'red', 'medium'],
+                    3 => [3, 'red', 'large'],
+                    4 => [4, 'blue', 'large'],
+                    5 => [5, 'green', 'medium'],
+                    6 => [6, 'red', 'short'],
+                    7 => [7, 'red', 'medium'],
+                    8 => [8, 'blue', 'medium'],
+                ],
+                [
+                    'medium' => [
+                        'red' => [
+                            0 => [0, 'red', 'medium'],
+                            2 => [2, 'red', 'medium'],
+                            7 => [7, 'red', 'medium'],
+                        ],
+                        'blue' => [
+                            1 => [1, 'blue', 'medium'],
+                            8 => [8, 'blue', 'medium'],
+                        ],
+                        'green' => [
+                            5 => [5, 'green', 'medium'],
+                        ],
+                    ],
+                    'large' => [
+                        'red' => [
+                            3 => [3, 'red', 'large'],
+                        ],
+                        'blue' => [
+                            4 => [4, 'blue', 'large'],
+                        ],
+                    ],
+                    'short' => [
+                        'red' => [
+                            6 => [6, 'red', 'short'],
+                        ],
+                    ]
+                ]
+            ]
+        ];
+    }
+
     public function dataReduceProvider()
     {
         $sum = function ($a, $b) {
@@ -336,6 +437,21 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     public function testSort($callback, $array, $expect)
     {
         $actual = Arrays::sort($array, $callback);
+
+        $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
+    }
+
+    /**
+     * @dataProvider dataGroupsProvider
+     *
+     * @param $callbacks
+     * @param $array
+     * @param $expect
+     */
+    public function testGroups($callbacks, $array, $expect)
+    {
+        $actual = Arrays::groups($array, $callbacks);
 
         $this->assertEquals($expect, $actual);
         $this->assertEquals(json_encode($expect), json_encode($actual));
