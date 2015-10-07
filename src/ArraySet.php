@@ -14,14 +14,6 @@ class ArraySet extends AbstractArray implements Set
     }
 
     /**
-     * @return array
-     */
-    public function items()
-    {
-        return $this->toArray();
-    }
-
-    /**
      * @param mixed $value
      * @return boolean
      */
@@ -49,13 +41,5 @@ class ArraySet extends AbstractArray implements Set
     public function add($value)
     {
         return parent::add($value);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->items;
     }
 }

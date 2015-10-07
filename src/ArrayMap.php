@@ -27,20 +27,12 @@ class ArrayMap extends AbstractArray implements Map
 
     /**
      * @param string $key
-     * @param mixed $key
+     * @param mixed $value
      * @return Map
      */
     public function __set($key, $value)
     {
         return $this->put($key, $value);
-    }
-
-    /**
-     * @return object
-     */
-    public function items()
-    {
-        return $this->toObject();
     }
 
     /**
@@ -53,13 +45,5 @@ class ArrayMap extends AbstractArray implements Map
     public function jsonSerialize()
     {
         return $this->toObject();
-    }
-
-    /**
-     * @return object
-     */
-    public function toObject()
-    {
-        return (object)$this->items;
     }
 }
