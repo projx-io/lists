@@ -5,8 +5,8 @@ namespace ProjxIO\Lists;
 interface Sortable
 {
     /**
-     * @param int $flags
+     * @param callable|null $map
      * @return Vector
      */
-    public function sort($flags = 0);
+    public function sort(callable $map = null);
 }

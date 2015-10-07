@@ -228,4 +228,50 @@ abstract class Arrays
         $values = array_values(self::filter($array, $filter, 1));
         return array_shift($values);
     }
+
+    /**
+     * Sorts an array. Keys/indexes will be kept. A callback can be provided to use to map each item to a sorting
+     * value.
+     *
+     * @param array $array
+     * @param callable|null $map
+     * @return array
+     */
+    public static function sort(array &$array, callable $map = null)
+    {
+        $order = is_callable($map) ? self::map($array, $map) : $array;
+        asort($order);
+        $keys = array_keys($order);
+        return self::reorder($array, $keys);
+    }
+
+    /**
+     * Reorders an array using the keys provided.
+     *
+     * @param array $values
+     * @param array $keys
+     * @return array
+     */
+    public static function reorder(array &$values, array &$keys)
+    {
+        $array = [];
+
+        foreach ($keys as $order) {
+            $array[$order] = $values[$order];
+        }
+
+        return $array;
+    }
+
+    /**
+     * Combines an array of values and keys.
+     *
+     * @param array $keys
+     * @param array $values
+     * @return array
+     */
+    public static function combine(array &$keys, array &$values)
+    {
+        return count($keys) ? array_combine($keys, $values) : [];
+    }
 }

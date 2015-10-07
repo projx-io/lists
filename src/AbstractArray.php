@@ -268,25 +268,13 @@ abstract class AbstractArray implements ArrayAccess, IteratorAggregate, Countabl
     }
 
     /**
-     * @param int $flags
-     * @return $this
+     * @param callable|null $map
+     * @return Vector
      */
-    public function sort($flags = null)
+    public function sort(callable $map = null)
     {
-        $items = $this->items;
-        $flags & SORT_DESC ? arsort($items, $flags) : asort($items, $flags);
-        return $this->wrap($items);
-    }
-
-    /**
-     * @param int $flags
-     * @return $this
-     */
-    public function ksort($flags = 0)
-    {
-        $items = $this->items;
-        $flags & SORT_DESC ? krsort($items, $flags) : ksort($items, $flags);
-        return $this->wrap($items);
+        $array = Arrays::sort($this->items, $map);
+        return $this->wrap($array);
     }
 
     /**

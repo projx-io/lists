@@ -36,7 +36,10 @@ class ArraysTest extends PHPUnit_Framework_TestCase
     private static $upperByRef;
     private static $lowerByRef;
 
-    public function dataMapProvider()
+    private static $upper;
+    private static $lower;
+
+    public function dataForEachProvider()
     {
         self::$upperByRef = function (&$value) {
             return $value = strtoupper($value);
@@ -64,6 +67,37 @@ class ArraysTest extends PHPUnit_Framework_TestCase
             [__CLASS__ . '::toUpperByRef', $mixed, $upper],
             [__CLASS__ . '::toLowerByRef', $mixed, $lower],
             [__CLASS__ . '::toLowerByRef', $upper, $lower],
+        ];
+    }
+
+    public function dataMapProvider()
+    {
+        self::$upper = function ($value) {
+            return $value = strtoupper($value);
+        };
+
+        self::$lower = function ($value) {
+            return $value = strtolower($value);
+        };
+
+        $upper = ['A', 'B', 'C'];
+        $lower = ['a', 'b', 'c'];
+        $mixed = ['a', 'B', 'c'];
+
+        return [
+            [self::$upper, [], []],
+            [self::$upper, $lower, $upper],
+            [self::$upper, $mixed, $upper],
+            [self::$lower, $mixed, $lower],
+            [self::$lower, $upper, $lower],
+            [[$this, 'toUpper'], $lower, $upper],
+            [[$this, 'toUpper'], $mixed, $upper],
+            [[$this, 'toLower'], $mixed, $lower],
+            [[$this, 'toLower'], $upper, $lower],
+            [__CLASS__ . '::toUpper', $lower, $upper],
+            [__CLASS__ . '::toUpper', $mixed, $upper],
+            [__CLASS__ . '::toLower', $mixed, $lower],
+            [__CLASS__ . '::toLower', $upper, $lower],
         ];
     }
 
@@ -170,8 +204,22 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function dataSortProvider()
+    {
+        return [
+            [null, [1, 2, 3], [1, 2, 3]],
+            [null, [1 => 3, 2 => 2, 3 => 1], [3 => 1, 2 => 2, 1 => 3]],
+            [null, ['a' => 'A'], ['a' => 'A']],
+            [null, ['a' => 'A', 'b' => 'B'], ['a' => 'A', 'b' => 'B']],
+            [null, ['b' => 'B', 'a' => 'A'], ['a' => 'A', 'b' => 'B']],
+            [null, ['b' => 'B', 'c' => 'C', 'a' => 'A'], ['a' => 'A', 'b' => 'B', 'c' => 'C']],
+            [Maps::key(), ['b' => 0, 'c' => 0, 'a' => 0], ['a' => 0, 'b' => 0, 'c' => 0]],
+            [Maps::key(), [], []],
+        ];
+    }
+
     /**
-     * @dataProvider dataMapProvider
+     * @dataProvider dataForEachProvider
      *
      * @param $callback
      * @param $array
@@ -183,6 +231,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         Arrays::each($array, $callback, $keys);
 
         $this->assertEquals($expect, $array);
+        $this->assertEquals(json_encode($expect), json_encode($array));
     }
 
     /**
@@ -197,6 +246,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $actual = Arrays::map($array, $callback);
 
         $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
     }
 
     /**
@@ -211,6 +261,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $actual = Arrays::filter($array, $callback);
 
         $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
     }
 
     /**
@@ -226,6 +277,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $actual = Arrays::mapFilter($array, $map, $filter);
 
         $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
     }
 
     /**
@@ -240,6 +292,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $actual = Arrays::rename($array, $callback);
 
         $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
     }
 
     /**
@@ -254,6 +307,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $actual = Arrays::group($array, $callback);
 
         $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
     }
 
     /**
@@ -269,5 +323,21 @@ class ArraysTest extends PHPUnit_Framework_TestCase
         $actual = Arrays::reduce($array, $initial, $callback);
 
         $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
+    }
+
+    /**
+     * @dataProvider dataSortProvider
+     *
+     * @param $callback
+     * @param $array
+     * @param $expect
+     */
+    public function testSort($callback, $array, $expect)
+    {
+        $actual = Arrays::sort($array, $callback);
+
+        $this->assertEquals($expect, $actual);
+        $this->assertEquals(json_encode($expect), json_encode($actual));
     }
 }
