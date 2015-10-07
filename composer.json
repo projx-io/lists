@@ -18,6 +18,9 @@
     "autoload": {
         "psr-4": {
             "ProjxIO\\Lists\\": "src"
-        }
+        },
+        "files": [
+            "src/global.php"
+        ]
     }
 }
