@@ -230,7 +230,7 @@ abstract class Maps
      */
     public static function isString()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return is_string($value);
         };
     }
@@ -242,7 +242,7 @@ abstract class Maps
      */
     public static function isArray()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return is_array($value);
         };
     }
@@ -254,7 +254,7 @@ abstract class Maps
      */
     public static function isObject()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return is_object($value);
         };
     }
@@ -266,7 +266,7 @@ abstract class Maps
      */
     public static function isNumeric()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return is_numeric($value);
         };
     }
@@ -278,7 +278,7 @@ abstract class Maps
      */
     public static function isInteger()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return is_integer($value);
         };
     }
@@ -290,7 +290,7 @@ abstract class Maps
      */
     public static function isBoolean()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return is_bool($value);
         };
     }
@@ -302,7 +302,7 @@ abstract class Maps
      */
     public static function isTrue()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return $value === true;
         };
     }
@@ -314,7 +314,7 @@ abstract class Maps
      */
     public static function isTruthy()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return !!$value;
         };
     }
@@ -326,7 +326,7 @@ abstract class Maps
      */
     public static function isFalse()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return $value === false;
         };
     }
@@ -338,7 +338,7 @@ abstract class Maps
      */
     public static function isFalsey()
     {
-        return function ($value, $key) {
+        return function ($value) {
             return !$value;
         };
     }
@@ -346,6 +346,7 @@ abstract class Maps
     /**
      * Returns bool value representing if a value matches an expected value.
      *
+     * @param mixed $expect
      * @return Closure
      */
     public static function equals($expect)
@@ -358,6 +359,7 @@ abstract class Maps
     /**
      * Returns bool value representing if a value is at least (GTE) an expected value.
      *
+     * @param mixed $expect
      * @return Closure
      */
     public static function atLeast($expect)
@@ -370,6 +372,7 @@ abstract class Maps
     /**
      * Returns bool value representing if a value is at most (LTE) an expected value.
      *
+     * @param mixed $expect
      * @return Closure
      */
     public static function atMost($expect)
@@ -382,6 +385,7 @@ abstract class Maps
     /**
      * Returns bool value representing if a value is more than (GT) an expected value.
      *
+     * @param mixed $expect
      * @return Closure
      */
     public static function moreThan($expect)
@@ -394,6 +398,7 @@ abstract class Maps
     /**
      * Returns bool value representing if a value is less than (LT) an expected value.
      *
+     * @param mixed $expect
      * @return Closure
      */
     public static function lessThan($expect)
@@ -418,9 +423,10 @@ abstract class Maps
     /**
      * Returns bool is a value can be found in the provided array.
      *
+     * @param $array
      * @return Closure
      */
-    public static function isValueOf($array, $strict = false)
+    public static function isValueOf($array)
     {
         $array = Collections::set($array);
         return function ($value) use ($array) {
@@ -431,6 +437,7 @@ abstract class Maps
     /**
      * Returns bool is a value can be found as a key in the provided array.
      *
+     * @param $array
      * @return Closure
      */
     public static function isKeyOf($array)
@@ -450,7 +457,7 @@ abstract class Maps
      */
     public static function reduce($reduction, $initial = null)
     {
-        return function ($value, $key) use ($initial, $reduction) {
+        return function ($value) use ($initial, $reduction) {
             $map = new ArrayMap($value);
             return $map->reduce($reduction, $initial);
         };
