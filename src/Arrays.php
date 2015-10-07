@@ -135,8 +135,7 @@ abstract class Arrays
         $limit = -1,
         $keysMap = true,
         $keysFilter = true
-    )
-    {
+    ) {
         return self::filter($array, function ($value, $key) use ($map, $filter, $limit, $keysMap, $keysFilter) {
             $mapped = call_user_func_array($map, $keysMap ? [$value, $key] : [$value]);
             return call_user_func_array($filter, $keysFilter ? [$mapped, $key] : [$mapped]);

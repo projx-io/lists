@@ -6,6 +6,19 @@ use Closure;
 
 abstract class Reductions
 {
+    public static function initial(&$count, $ignore_initial_null, &$current, $a, $b, $increment = true)
+    {
+        if (!$count && $ignore_initial_null && $current === null) {
+            $current = $b;
+            if ($increment) {
+                $count++;
+            }
+        } else {
+            $current = $a;
+            $count++;
+        }
+    }
+
     /**
      * Sums an array.
      *
@@ -17,7 +30,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? 0 : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, 0);
             return $current + (is_callable($map) ? call_user_func($map, $value, $key) : $value);
         };
     }
@@ -33,7 +46,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? 1 : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, 1);
             return $current * (is_callable($map) ? call_user_func($map, $value, $key) : $value);
         };
     }
@@ -48,7 +61,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? [] : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, []);
             return array_merge($current, (is_callable($map) ? call_user_func($map, $value, $key) : $value));
         };
     }
@@ -65,7 +78,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, $glue, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? '' : $current . $glue;
+            self::initial($count, $ignore_initial_null, $current, $current . $glue, '');
             return $current . (is_callable($map) ? call_user_func($map, $value, $key) : $value);
         };
     }
@@ -81,7 +94,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? true : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, true);
             return $current && (is_callable($map) ? call_user_func($map, $value, $key) : $value);
         };
     }
@@ -97,7 +110,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? false : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, false);
             return $current || (is_callable($map) ? call_user_func($map, $value, $key) : $value);
         };
     }
@@ -113,7 +126,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? $value : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, $value);
             return max($current, (is_callable($map) ? call_user_func($map, $value, $key) : $value));
         };
     }
@@ -129,7 +142,7 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? $value : $current;
+            self::initial($count, $ignore_initial_null, $current, $current, $value);
             return min($current, (is_callable($map) ? call_user_func($map, $value, $key) : $value));
         };
     }
@@ -145,8 +158,8 @@ abstract class Reductions
     {
         $count = 0;
         return function ($current, $value, $key) use ($map, &$count, $ignore_initial_null) {
-            $current = !$count++ && $ignore_initial_null && $current === null ? [] : $current;
-            return ($current * ($count - 1) + (is_callable($map) ? call_user_func($map, $value, $key) : $value)) / $count;
+            self::initial($count, $ignore_initial_null, $current, $current, 0, false);
+            return ($current * ($count) + (is_callable($map) ? call_user_func($map, $value, $key) : $value)) / ($count + 1);
         };
     }
 }
