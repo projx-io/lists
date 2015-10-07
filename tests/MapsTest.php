@@ -164,6 +164,11 @@ class MapsTest extends PHPUnit_Framework_TestCase
             ['reduce merge', Maps::reduce([], Reductions::merge()), [], [[], [], []]],
             ['reduce merge', Maps::reduce([1, 2, 3], Reductions::merge()), [1, 2, 3, 4, 5, 6, 7, 8, 9], [[4, 5, 6], [7, 8], [9]]],
             ['reduce merge', Maps::reduce([], Reductions::merge()), [4, 5, 6, 7, 8, 9], [[4, 5, 6], [7, 8], [9]]],
+            ['reduce implode', Maps::reduce('', Reductions::implode()), '', []],
+            ['reduce implode', Maps::reduce('', Reductions::implode(',')), '', []],
+            ['reduce implode', Maps::reduce('', Reductions::implode(',')), ',,,', ['', '', '']],
+            ['reduce implode', Maps::reduce('a', Reductions::implode(',')), 'a,,,', ['', '', '']],
+            ['reduce implode', Maps::reduce('a', Reductions::implode(',')), 'a,b,c,d', ['b', 'c', 'd']],
         ];
     }
 

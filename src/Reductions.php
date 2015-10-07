@@ -24,4 +24,11 @@ abstract class Reductions
             return array_merge($current, (is_callable($map) ? call_user_func($map, $value, $key) : $value));
         };
     }
+
+    public static function implode($glue = '', callable $map = null)
+    {
+        return function ($current, $value, $key) use ($map, $glue) {
+            return $current . $glue . (is_callable($map) ? call_user_func($map, $value, $key) : $value);
+        };
+    }
 }
