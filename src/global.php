@@ -29,5 +29,5 @@ function set($array = [])
         $array = $array->items();
     }
 
-    return new ArraySet($array);
+    return new ArraySet(array_values((array)$array));
 }
