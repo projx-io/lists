@@ -135,8 +135,7 @@ abstract class Arrays
         $limit = -1,
         $keysMap = true,
         $keysFilter = true
-    )
-    {
+    ) {
         return self::filter($array, function ($value, $key) use ($map, $filter, $limit, $keysMap, $keysFilter) {
             $mapped = call_user_func_array($map, $keysMap ? [$value, $key] : [$value]);
             return call_user_func_array($filter, $keysFilter ? [$mapped, $key] : [$mapped]);
@@ -190,10 +189,9 @@ abstract class Arrays
     }
 
     /**
-     * Maps each original value into a group, and returns an array containing the group names and values.
+     * Maps each original value into a group or subgroup depending on the number of callbacks provided.
      *
-     * This is similar to rename, except that the mapped names point to arrays of items that share the same group name,
-     * rather than a single item.
+     * If zero callbacks are provided, then the original array will be returned.
      *
      * For info on $keys, check class documentation for {@see ProjxIO\Lists\Arrays}
      *
