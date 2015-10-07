@@ -33,11 +33,11 @@ interface Collection extends IteratorAggregate, Countable
     public function mapFilter(callable $map, callable $filter);
 
     /**
-     * @param mixed $initial
      * @param callable $callback
+     * @param mixed|null $initial
      * @return mixed
      */
-    public function reduce($initial, callable $callback);
+    public function reduce(callable $callback, $initial = null);
 
     /**
      * @param callable $callback

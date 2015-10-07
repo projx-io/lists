@@ -444,13 +444,118 @@ abstract class Maps
     /**
      * Returns a reduction of the value, assuming the value is an array or collection.
      *
+     * @param $reduction
+     * @param null $initial
      * @return Closure
      */
-    public static function reduce($initial, $reduction)
+    public static function reduce($reduction, $initial = null)
     {
         return function ($value, $key) use ($initial, $reduction) {
             $map = new ArrayMap($value);
-            return $map->reduce($initial, $reduction);
+            return $map->reduce($reduction, $initial);
+        };
+    }
+
+    /**
+     * Offsets a number.
+     *
+     * @param int|float $offset
+     * @return Closure
+     */
+    public static function offset($offset)
+    {
+        return function ($value) use ($offset) {
+            return $value + $offset;
+        };
+    }
+
+    /**
+     * Scales a number.
+     *
+     * @param int|float $scale
+     * @return Closure
+     */
+    public static function scale($scale)
+    {
+        return function ($value) use ($scale) {
+            return $value * $scale;
+        };
+    }
+
+    /**
+     * Raises a number by a power.
+     *
+     * @param int|float $power
+     * @return Closure
+     */
+    public static function power($power)
+    {
+        return function ($value) use ($power) {
+            return pow($value, $power);
+        };
+    }
+
+    /**
+     * Performs a logarithm on a number with a base.
+     *
+     * @param int|float $base
+     * @return Closure
+     */
+    public static function log($base)
+    {
+        return function ($value) use ($base) {
+            return log($value, $base);
+        };
+    }
+
+    /**
+     * Rounds a number.
+     *
+     * @param int $precision
+     * @param int $mode
+     * @return Closure
+     */
+    public static function round($precision = 0, $mode = PHP_ROUND_HALF_UP)
+    {
+        return function ($value) use ($precision, $mode) {
+            return round($value, $precision, $mode);
+        };
+    }
+
+    /**
+     * Floors a number.
+     *
+     * @return Closure
+     */
+    public static function floor()
+    {
+        return function ($value) {
+            return floor($value);
+        };
+    }
+
+    /**
+     * Ceils a number.
+     *
+     * @return Closure
+     */
+    public static function ceil()
+    {
+        return function ($value) {
+            return ceil($value);
+        };
+    }
+
+    /**
+     * Mods a number.
+     *
+     * @param $divisor
+     * @return Closure
+     */
+    public static function mod($divisor)
+    {
+        return function ($value) use ($divisor) {
+            return $value % $divisor;
         };
     }
 }

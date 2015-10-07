@@ -113,13 +113,13 @@ abstract class AbstractArray implements ArrayAccess, IteratorAggregate, Countabl
     }
 
     /**
-     * @param mixed $initial
      * @param callable $callback
+     * @param mixed|null $initial
      * @return mixed
      */
-    public function reduce($initial, callable $callback)
+    public function reduce(callable $callback, $initial = null)
     {
-        return Arrays::reduce($this->items, $initial, $callback);
+        return Arrays::reduce($this->items, $callback, $initial);
     }
 
     /**

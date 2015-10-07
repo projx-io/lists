@@ -135,7 +135,8 @@ abstract class Arrays
         $limit = -1,
         $keysMap = true,
         $keysFilter = true
-    ) {
+    )
+    {
         return self::filter($array, function ($value, $key) use ($map, $filter, $limit, $keysMap, $keysFilter) {
             $mapped = call_user_func_array($map, $keysMap ? [$value, $key] : [$value]);
             return call_user_func_array($filter, $keysFilter ? [$mapped, $key] : [$mapped]);
@@ -223,11 +224,11 @@ abstract class Arrays
      * be returned.
      *
      * @param array $array
-     * @param mixed $initial
      * @param callable $callback
+     * @param mixed|null $initial
      * @return mixed
      */
-    public static function reduce(array &$array, $initial, callable $callback)
+    public static function reduce(array &$array, callable $callback, $initial = null)
     {
         $result = $initial;
         self::each($array, function ($value, $key) use (&$result, $callback) {

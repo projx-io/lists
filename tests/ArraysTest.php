@@ -421,7 +421,7 @@ class ArraysTest extends PHPUnit_Framework_TestCase
      */
     public function testReduce($callback, $initial, $array, $expect)
     {
-        $actual = Arrays::reduce($array, $initial, $callback);
+        $actual = Arrays::reduce($array, $callback, $initial);
 
         $this->assertEquals($expect, $actual);
         $this->assertEquals(json_encode($expect), json_encode($actual));
