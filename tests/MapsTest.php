@@ -156,6 +156,11 @@ class MapsTest extends PHPUnit_Framework_TestCase
             ['reduce', Maps::reduce(13, Reductions::sum()), 13, []],
             ['reduce', Maps::reduce(0, Reductions::sum()), 0, [5, -5]],
             ['reduce', Maps::reduce(0, Reductions::sum()), 10, [5, -10, 15]],
+            ['reduce', Maps::reduce(1, Reductions::product()), 6, [1, 2, 3]],
+            ['reduce', Maps::reduce(1, Reductions::product()), 1, []],
+            ['reduce', Maps::reduce(13, Reductions::product()), 13, []],
+            ['reduce', Maps::reduce(1, Reductions::product()), -25, [5, -5]],
+            ['reduce', Maps::reduce(1, Reductions::product()), -750, [5, -10, 15]],
         ];
     }
 
