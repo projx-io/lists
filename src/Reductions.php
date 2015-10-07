@@ -31,4 +31,18 @@ abstract class Reductions
             return $current . $glue . (is_callable($map) ? call_user_func($map, $value, $key) : $value);
         };
     }
+
+    public static function ands(callable $map = null)
+    {
+        return function ($current, $value, $key) use ($map) {
+            return $current && (is_callable($map) ? call_user_func($map, $value, $key) : $value);
+        };
+    }
+
+    public static function ors(callable $map = null)
+    {
+        return function ($current, $value, $key) use ($map) {
+            return $current || (is_callable($map) ? call_user_func($map, $value, $key) : $value);
+        };
+    }
 }

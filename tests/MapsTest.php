@@ -170,6 +170,21 @@ class MapsTest extends PHPUnit_Framework_TestCase
             ['reduce implode', Maps::reduce('a', Reductions::implode(',')), 'a,,,', ['', '', '']],
             ['reduce implode', Maps::reduce('a', Reductions::implode(',')), 'a,b,c,d', ['b', 'c', 'd']],
             ['reduce implode', Maps::reduce('a', Reductions::implode(',', Maps::key())), 'a,0,1,2', ['b', 'c', 'd']],
+            ['reduce ands', Maps::reduce(true, Reductions::ands()), true, []],
+            ['reduce ands', Maps::reduce(false, Reductions::ands()), false, []],
+            ['reduce ands', Maps::reduce(true, Reductions::ands()), true, [true, true, true]],
+            ['reduce ands', Maps::reduce(true, Reductions::ands()), false, [true, true, false]],
+            ['reduce ands', Maps::reduce(false, Reductions::ands()), false, [true, false, true]],
+            ['reduce ands', Maps::reduce(false, Reductions::ands()), false, [false, true, true]],
+            ['reduce ands', Maps::reduce(false, Reductions::ands()), false, [false, false, false]],
+            ['reduce ands', Maps::reduce(true, Reductions::ands()), false, [true, true, false]],
+            ['reduce ors', Maps::reduce(true, Reductions::ors()), true, []],
+            ['reduce ors', Maps::reduce(false, Reductions::ors()), false, []],
+            ['reduce ors', Maps::reduce(true, Reductions::ors()), true, [true, true, true]],
+            ['reduce ors', Maps::reduce(true, Reductions::ors()), true, [true, true, false]],
+            ['reduce ors', Maps::reduce(false, Reductions::ors()), true, [true, false, true]],
+            ['reduce ors', Maps::reduce(false, Reductions::ors()), true, [false, true, true]],
+            ['reduce ors', Maps::reduce(false, Reductions::ors()), false, [false, false, false]],
         ];
     }
 
